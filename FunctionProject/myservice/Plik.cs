@@ -1,6 +1,6 @@
 ﻿namespace FunctionProject.myservice
 {
-    public sealed record Plik(string Name);
+    internal sealed record Plik(string Name, Status status);
 }
 
 /* probny json

@@ -1,7 +1,8 @@
 ﻿using FunctionProject.myservice;
+using MediatR;
 using Microsoft.Azure.Functions.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Http;
+using System.Reflection;
 
 [assembly: FunctionsStartup(typeof(FunctionProject.Startup))]
 
@@ -13,6 +14,8 @@ public class Startup : FunctionsStartup
     {
         builder.Services.AddHttpClient();
 
-        builder.Services.AddTransient<IProba, Proba>();
+        builder.Services.AddTransient<IMessageValidator, MessageValidator>();
+
+        builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssemblyContaining<Startup>());
     }
 }

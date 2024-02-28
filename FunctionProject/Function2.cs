@@ -2,48 +2,51 @@ using System;
 using System.IO;
 using System.Text;
 using System.Threading.Tasks;
-using Azure.Storage.Blobs;
 using FunctionProject.myservice;
+using MediatR;
 using Microsoft.Azure.Storage.Blob;
 using Microsoft.Azure.WebJobs;
 using Microsoft.Extensions.Logging;
-using Newtonsoft.Json;
 
 namespace FunctionProject
 {
     public class Function2
     {
-        public Function2(IServiceProvider serviceProvider, IProba proba)
+        public const string ConnectionString = "AzureWebJobsStorage";
+        public const string BlobContainerName = "%BlobContainerName%";
+        public const string QueueName = "%QueueName%";
+
+        public Function2(IMessageValidator messageValidator, IMediator mediator)
         {
-            ServiceProvider = serviceProvider;
-            Proba = proba;
+            MessageValidator = messageValidator;
+            Mediator = mediator;
         }
 
-        public IServiceProvider ServiceProvider { get; }
-        public IProba Proba { get; }
+        public IMessageValidator MessageValidator { get; }
+        public IMediator Mediator { get; }
 
         [FunctionName("Function2")]
-        public async Task Run([QueueTrigger("functionproject-queue1", Connection = "AzureWebJobsStorage")] string myQueueItem, ILogger log,
-            [Blob("images", FileAccess.Read, Connection = "AzureWebJobsStorage")] CloudBlobContainer blobContainer)
+        public async Task Run([QueueTrigger(QueueName, Connection = ConnectionString)] string myQueueItem, ILogger log,
+            [Blob(BlobContainerName, FileAccess.Read, Connection = ConnectionString)] CloudBlobContainer blobContainer)
         {
 
-            var result = Proba.GetCos();
-            log.LogWarning($"no i teraz  tak : dependency bitches : '{result}'");
+            var result = MessageValidator.Validate(myQueueItem);
+            log.LogWarning($"pytanie: czy mozna przesylac dalej message? : '{result}'");
             log.LogInformation($"C# Queue trigger function processed: {myQueueItem}");
 
 
-            
-            // walidacja jsona
-            var file = JsonConvert.SerializeObject(myQueueItem);
+
+            // proba mediatr
+            var command = new ValidateMessageCommand(myQueueItem);
+            var isValid = await Mediator.Send(command);
+            log.LogCritical($"czy to jest to : {isValid}");
 
 
-            string blobName = GetNewBlobName();
+            var blobName = GetNewBlobName();
             CloudBlockBlob blob = blobContainer.GetBlockBlobReference(blobName);
  
             // sprawdz czy jest to potrzebne
             blob.Properties.ContentType = "application/json";
-
-            //use Upload method for stream
 
             using (MemoryStream ms = new MemoryStream(Encoding.UTF8.GetBytes(myQueueItem)))
             {
