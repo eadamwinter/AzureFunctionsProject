@@ -1,8 +1,7 @@
-﻿using FunctionProject.myservice;
+﻿using FunctionProject.Services;
 using MediatR;
 using Microsoft.Azure.Functions.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection;
-using System.Reflection;
 
 [assembly: FunctionsStartup(typeof(FunctionProject.Startup))]
 
@@ -17,5 +16,7 @@ public class Startup : FunctionsStartup
         builder.Services.AddTransient<IMessageValidator, MessageValidator>();
 
         builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssemblyContaining<Startup>());
+
+        builder.Services.AddLogging();
     }
 }
