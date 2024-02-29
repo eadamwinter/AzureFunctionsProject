@@ -1,0 +1,9 @@
+{
+    "IsEncrypted": false,
+    "Values": {
+        "AzureWebJobsStorage": "UseDevelopmentStorage=true",
+        "FUNCTIONS_WORKER_RUNTIME": "dotnet",
+        "BlobContainerName": "functionproject-blob1",
+        "QueueName": "functionproject-queue1"
+    }
+}
