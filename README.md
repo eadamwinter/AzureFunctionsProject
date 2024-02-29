@@ -20,15 +20,20 @@ After cloning the repo, please copy the file *local.settings.template.json* and 
 - Make sure that your local azurite consists of queue with name specified by *QueueName* value
 - Make sure that your local azurite consists of blob container specified by *BlobContainerName* value
 
-**The application by default works on 
+## Azurite
+
+You can install azurite with powershell by typing command : *npm install -g azurite*  
+Before you might be requested to install or update npm  
+Next you can connect to azurite via azure storage explorer (https://azure.microsoft.com/en-us/products/storage/storage-explorer)
 
 # Starting the application
 
-1. Open application folder in Visual Studio or any other IDE.
-2. Prepare your local.settings.json file.
-3. Connect to azurite (for example using Azure Storage Explorer) and make sure about queue and blob container mentioned in Configuration section.
-4. Run application.
-5. Function names and link to ListBlobs function should be visible on the console.
+1. Clone repo from github.
+2. Open Project in Visual Studio or any other IDE.
+3. Prepare your local.settings.json file.
+4. Connect to azurite (for example using Azure Storage Explorer) and make sure about queue and blob container mentioned in Configuration section.
+5. Run application.
+6. Function names and link to ListBlobs function should be visible on the console.
 
 To use HTTP triggered function go to browser and type http://localhost:{port}/api/ListBlobs.  
 To use Queue triggered function go to azure storage explorer and add new sensor message to specified queue.
