@@ -1,6 +1,6 @@
 # About
 
-This .net based Azure Functions application consists of two Azure Functions. It is designed for developer purposes using azurite (Azure Storage Emulator).
+This .net based Azure Functions application consists of two Azure Functions. It is designed for development purposes using azurite (Azure Storage Emulator).
 
 
 # Functions
